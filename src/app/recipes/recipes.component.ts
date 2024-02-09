@@ -1,10 +1,14 @@
 import { Component } from '@angular/core';
+import { Recipe } from './recipe.model';
 
 @Component({
   selector: 'app-recipes',
   templateUrl: './recipes.component.html',
-  styleUrl: './recipes.component.css'
+  styleUrl: './recipes.component.css',
 })
 export class RecipesComponent {
-
+  recipeDisc: Recipe;
+  constructor() {
+    this.recipeDisc = {} as Recipe;
+  }
 }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Recipe } from '../recipe.model';
 
 @Component({
@@ -7,16 +7,20 @@ import { Recipe } from '../recipe.model';
   styleUrl: './recipe-list.component.css',
 })
 export class RecipeListComponent {
-  recipes: Recipe[] = [
+  @Output() itemWasClicked = new EventEmitter<Recipe>();
+  @Input() recipes: Recipe[] = [
     new Recipe(
       'test recipe',
       'this is only for test',
       'https://upload.wikimedia.org/wikipedia/commons/1/15/Recipe_logo.jpeg'
     ),
     new Recipe(
-      'test recipe',
-      'this is only for test',
+      'test recipe 2',
+      'this is only for test 2',
       'https://upload.wikimedia.org/wikipedia/commons/1/15/Recipe_logo.jpeg'
     ),
   ];
+  onItemWasClick(recipe: Recipe) {
+    this.itemWasClicked.emit(recipe);
+  }
 }
