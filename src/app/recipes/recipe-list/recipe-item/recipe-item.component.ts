@@ -9,10 +9,9 @@ import { RecipeService } from '../../recipe.service';
 })
 export class RecipeItemComponent {
   @Input() recipe: Recipe;
+  @Input() index: number | undefined;
+
   constructor(private recipeService: RecipeService) {
     this.recipe = {} as Recipe; // You can initialize with a default value or an empty object
-  }
-  onItemClick() {
-    this.recipeService.itemSlected.emit(this.recipe);
   }
 }

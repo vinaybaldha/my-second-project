@@ -5,107 +5,86 @@ import { ShoppingListService } from '../shopping-list/shopinglist.service';
 @Injectable()
 export class RecipeService {
   constructor(private slService: ShoppingListService) {}
-  ingredient1 = new Ingredient('Basmati Rice', 2);
-  ingredient2 = new Ingredient('Chicken', 500);
-  ingredient3 = new Ingredient('Onions', 2);
-  ingredient4 = new Ingredient('Tomatoes', 3);
-  ingredient5 = new Ingredient('Ginger', 1);
-  ingredient6 = new Ingredient('Garlic', 5);
-  ingredient7 = new Ingredient('Cumin Seeds', 1);
-  ingredient8 = new Ingredient('Coriander Powder', 1);
-  ingredient9 = new Ingredient('Turmeric Powder', 1);
-  ingredient10 = new Ingredient('Chili Powder', 1);
-  ingredient11 = new Ingredient('Garam Masala', 1);
-  ingredient12 = new Ingredient('Vegetable Oil', 2);
-  ingredient13 = new Ingredient('Salt', 1);
-  ingredient14 = new Ingredient('Fresh Coriander Leaves', 2);
+
+  private vadapavImage =
+    'https://images.pexels.com/photos/17433337/pexels-photo-17433337/free-photo-of-mumbai-style-vada-pav.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1E'; // Replace with actual link
+  private freakyImage =
+    'https://d36v5spmfzyapc.cloudfront.net/wp-content/uploads/2018/03/Chicken-Frankie-Roll-848x424.jpg.webp'; // Replace with actual link
+  private dabeliImage =
+    'https://www.awesomecuisine.com/wp-content/uploads/2008/05/dabeli.jpg'; // Replace with actual link
+
+  private vadapavIngredients: Ingredient[] = [
+    new Ingredient('Pav (Bread Rolls)', 4),
+    new Ingredient('Potatoes', 4),
+    new Ingredient('Garlic Chutney', 2),
+    new Ingredient('Green Chutney', 2),
+    new Ingredient('Mustard Seeds', 1),
+    new Ingredient('Turmeric Powder', 1),
+    new Ingredient('Coriander Leaves', 2),
+    new Ingredient('Vegetable Oil', 2),
+    new Ingredient('Salt', 1),
+  ];
+
+  // Real-world Indian ingredients for Freaky
+  private freakyIngredients: Ingredient[] = [
+    new Ingredient('Maggi Noodles', 2),
+    new Ingredient('Mixed Vegetables', 1),
+    new Ingredient('Schezwan Sauce', 2),
+    new Ingredient('Soy Sauce', 1),
+    new Ingredient('Green Onions', 2),
+    new Ingredient('Vegetable Oil', 2),
+  ];
+
+  // Real-world Indian ingredients for Dabeli
+  private dabeliIngredients: Ingredient[] = [
+    new Ingredient('Pav (Bread Rolls)', 4),
+    new Ingredient('Boiled Potatoes', 4),
+    new Ingredient('Dabeli Masala', 2),
+    new Ingredient('Tamarind Chutney', 2),
+    new Ingredient('Garlic Chutney', 2),
+    new Ingredient('Roasted Peanuts', 2),
+    new Ingredient('Sev', 2),
+    new Ingredient('Coriander Leaves', 2),
+    new Ingredient('Vegetable Oil', 2),
+    new Ingredient('Salt', 1),
+  ];
 
   // Real-world Indian recipes
-  recipe1 = new Recipe(
-    'Chicken Biryani',
-    'A fragrant and flavorful Indian rice dish.',
-    'https://www.thespruceeats.com/thmb/XDBL9gA6A6nYWUdsRZ3QwH084rk=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/SES-chicken-biryani-recipe-7367850-hero-A-ed211926bb0e4ca1be510695c15ce111.jpg',
-    [
-      this.ingredient1,
-      this.ingredient2,
-      this.ingredient3,
-      this.ingredient4,
-      this.ingredient5,
-      this.ingredient6,
-      this.ingredient7,
-      this.ingredient8,
-      this.ingredient9,
-      this.ingredient10,
-      this.ingredient11,
-      this.ingredient12,
-      this.ingredient13,
-      this.ingredient14,
-    ]
+  private vadapavRecipe = new Recipe(
+    'Vadapav',
+    'A popular street food from Mumbai, consisting of a spicy potato filling in a pav.',
+    this.vadapavImage,
+    this.vadapavIngredients
   );
 
-  recipe2 = new Recipe(
-    'Paneer Tikka Masala',
-    'A popular vegetarian Indian dish.',
-    'https://cookingfromheart.com/wp-content/uploads/2017/03/Paneer-Tikka-Masala-4.jpg',
-    [
-      this.ingredient2,
-      this.ingredient3,
-      this.ingredient4,
-      this.ingredient5,
-      this.ingredient6,
-      this.ingredient7,
-      this.ingredient8,
-      this.ingredient9,
-      this.ingredient10,
-      this.ingredient11,
-      this.ingredient12,
-      this.ingredient13,
-      this.ingredient14,
-    ]
+  private freakyRecipe = new Recipe(
+    'Frankie Roll',
+    'A quirky and spicy twist to Maggi noodles with vegetables.',
+    this.freakyImage,
+    this.freakyIngredients
   );
 
-  recipe3 = new Recipe(
-    'Vegetable Biryani',
-    'A delicious and aromatic Indian rice dish.',
-    'https://images.immediate.co.uk/production/volatile/sites/30/2020/10/Vegetable-Biryani-With-Green-Raita-159c15d.jpg?quality=90&resize=556,505',
-    [
-      this.ingredient1,
-      this.ingredient3,
-      this.ingredient4,
-      this.ingredient5,
-      this.ingredient6,
-      this.ingredient7,
-      this.ingredient8,
-      this.ingredient9,
-      this.ingredient10,
-      this.ingredient11,
-      this.ingredient12,
-      this.ingredient13,
-      this.ingredient14,
-    ]
+  private dabeliRecipe = new Recipe(
+    'Dabeli',
+    'A flavorful and spicy Indian street food snack with a potato filling.',
+    this.dabeliImage,
+    this.dabeliIngredients
   );
 
   // Array of real-world Indian recipes
-  recipes: Recipe[] = [this.recipe1, this.recipe2, this.recipe3];
-  // private recipes: Recipe[] = [
-  //   new Recipe(
-  //     'test recipe',
-  //     'this is only for test',
-  //     'https://upload.wikimedia.org/wikipedia/commons/1/15/Recipe_logo.jpeg',
-  //     []
-  //   ),
-  //   new Recipe(
-  //     'test recipe 2',
-  //     'this is only for test 2',
-  //     'https://upload.wikimedia.org/wikipedia/commons/1/15/Recipe_logo.jpeg',
-  //     []
-  //   ),
-  // ];
+  private recipes: Recipe[] = [
+    this.vadapavRecipe,
+    this.freakyRecipe,
+    this.dabeliRecipe,
+  ];
 
   itemSlected = new EventEmitter<Recipe>();
 
   getRecipe() {
     return this.recipes.slice();
+  }
+  getRecipeById(index: number) {
+    return this.recipes[index];
   }
   addToShopping(ingredients: Ingredient[]) {
     this.slService.addFromRecipe(ingredients);
