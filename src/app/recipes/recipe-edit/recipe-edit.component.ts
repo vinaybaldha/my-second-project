@@ -12,14 +12,11 @@ import { Ingredient } from '../../shared/ingredient.model';
   styleUrl: './recipe-edit.component.css',
 })
 export class RecipeEditComponent implements OnInit {
-  recipeName!: string;
-  recipeImg!: string;
-  recipeDesc!: string;
-  rIngredients!: FormArray;
   form!: FormGroup;
-  id: number | undefined;
+  id!: number;
   editMode = false;
-  recipe!: Recipe;
+  ingredients!: Ingredient[];
+
   constructor(
     private route: ActivatedRoute,
     private recipeService: RecipeService
@@ -28,34 +25,41 @@ export class RecipeEditComponent implements OnInit {
     this.route.params.subscribe((params: Params) => {
       this.id = +params['id'];
       this.editMode = params['id'] != null;
-      if ((this.editMode = true)) {
-        this.recipe = this.recipeService.getRecipeById(this.id);
-        this.recipeName = this.recipe.name;
-        this.recipeImg = this.recipe.imagePath;
-        this.recipeDesc = this.recipe.description;
-        if (this.recipe.ingredients) {
-          for (let ingredient of this.recipe.ingredients) {
-            this.rIngredients.push(
-              new FormGroup({
-                name: new FormControl(ingredient.name),
-                amount: new FormControl(ingredient.amount),
-              })
-            );
-          }
-        }
-        this.initForm();
-      }
+      this.initForm();
     });
   }
-  initForm() {
-    this.form = new FormGroup({
-      name: new FormControl(this.recipeName),
-      description: new FormControl(this.recipeDesc),
-      img: new FormControl(this.recipeImg),
-      ingredients: this.rIngredients,
-    });
-  }
+
   onSave() {
     console.log(this.form);
+  }
+  private initForm() {
+    let recipeName = '';
+    let recipeImagePath = '';
+    let recipeDescription = '';
+    let recipeIngredients = new FormArray<FormGroup>([]);
+    let control = new FormControl(null);
+
+    if (this.editMode) {
+      const recipe = this.recipeService.getRecipeById(this.id);
+      recipeName = recipe.name;
+      recipeImagePath = recipe.imagePath;
+      recipeDescription = recipe.description;
+      if (recipe['ingredients']) {
+        this.ingredients = recipe.ingredients;
+        for (let ingredient of recipe.ingredients) {
+          let item = new FormGroup({
+            name: new FormControl(ingredient.name),
+            amount: new FormControl(ingredient.amount),
+          });
+          recipeIngredients.push(item);
+        }
+      }
+    }
+    this.form = new FormGroup({
+      name: new FormControl(recipeName),
+      imagePath: new FormControl(recipeImagePath),
+      description: new FormControl(recipeDescription),
+      ingredients: recipeIngredients,
+    });
   }
 }
