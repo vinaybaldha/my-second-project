@@ -1,8 +1,6 @@
-import { NgClass } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Params } from '@angular/router';
-import { Recipe } from '../recipe.model';
 import { RecipeService } from '../recipe.service';
 import { Ingredient } from '../../shared/ingredient.model';
 
@@ -19,7 +17,8 @@ export class RecipeEditComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private recipeService: RecipeService
+    private recipeService: RecipeService,
+    private cdr: ChangeDetectorRef
   ) {}
   ngOnInit(): void {
     this.route.params.subscribe((params: Params) => {
@@ -37,7 +36,6 @@ export class RecipeEditComponent implements OnInit {
     let recipeImagePath = '';
     let recipeDescription = '';
     let recipeIngredients = new FormArray<FormGroup>([]);
-    let control = new FormControl(null);
 
     if (this.editMode) {
       const recipe = this.recipeService.getRecipeById(this.id);
@@ -61,5 +59,18 @@ export class RecipeEditComponent implements OnInit {
       description: new FormControl(recipeDescription),
       ingredients: recipeIngredients,
     });
+  }
+  onIngredientAdd() {
+    let item = new FormGroup({
+      name: new FormControl(),
+      amount: new FormControl(),
+    });
+
+    (this.form.get('ingredients') as FormArray).push(item);
+    this.cdr.detectChanges();
+    console.log(this.form.value);
+  }
+  get ingredientCntr() {
+    return (<FormArray>this.form.get('ingredients')).controls;
   }
 }
