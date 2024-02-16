@@ -1,31 +1,49 @@
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  Output,
-  ViewChild,
-} from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Ingredient } from '../../shared/ingredient.model';
 import { ShoppingListService } from '../shopinglist.service';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-shopping-edit',
   templateUrl: './shopping-edit.component.html',
   styleUrl: './shopping-edit.component.css',
 })
-export class ShoppingEditComponent {
-  @ViewChild('inputName') nameRef: ElementRef;
-  @ViewChild('inputAmount') amountRef: ElementRef;
-
-  constructor(private slService: ShoppingListService) {
-    this.nameRef = {} as ElementRef;
-    this.amountRef = {} as ElementRef;
+export class ShoppingEditComponent implements OnInit {
+  @ViewChild('f') form!: NgForm;
+  editMode = false;
+  ingredient!: Ingredient;
+  id!: number;
+  constructor(private slService: ShoppingListService) {}
+  ngOnInit(): void {
+    this.slService.startEdit.subscribe((index: number) => {
+      this.id = index;
+      this.editMode = true;
+      this.ingredient = this.slService.getIngredient(index);
+      this.form.setValue({
+        name: this.ingredient.name,
+        amount: this.ingredient.amount,
+      });
+    });
   }
+  onAdd(form: NgForm) {
+    const name = form.value.name;
+    const amount = form.value.amount;
 
-  onAdd() {
-    const name = this.nameRef.nativeElement.value;
-    const amount = this.amountRef.nativeElement.value;
     const ingredient = new Ingredient(name, amount);
-    this.slService.addIngredient(ingredient);
+    if (this.editMode) {
+      this.slService.updateIngredient(this.id, ingredient);
+    } else {
+      this.slService.addIngredient(ingredient);
+    }
+    this.editMode = false;
+    form.reset();
+  }
+  onClear() {
+    this.form.reset();
+    this.editMode = false;
+  }
+  onDelete() {
+    this.onClear();
+    this.slService.deleteIngredient(this.id);
   }
 }
