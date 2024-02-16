@@ -91,6 +91,7 @@ export class RecipeService {
   }
   deleteRecipe(index: number) {
     this.recipes.splice(index, 1);
+    this.onRecipeChange.next(this.recipes);
   }
   onAddRecipe(recipe: Recipe) {
     this.recipes.push(recipe);
