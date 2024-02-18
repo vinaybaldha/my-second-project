@@ -21,9 +21,14 @@
         />
       </div>
 
-      <button type="submit" class="btn btn-primary">SignUp</button> |
+      <button type="submit" class="btn btn-primary">
+        {{ isLogin ? "Login" : "Sign Up" }}
+      </button>
+      |
 
-      <button type="button" class="btn btn-primary">Switch to Login</button>
+      <button type="button" class="btn btn-primary" (click)="onSwitch()">
+        Switch to {{ isLogin ? "Sign Up" : "Login" }}
+      </button>
     </form>
   </div>
 </div>
