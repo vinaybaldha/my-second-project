@@ -32,7 +32,7 @@ export class AuthComponent {
           },
           (error) => {
             console.log(error);
-            this.error = 'Unexpected error occured.';
+            this.error = error;
             this.isLoading = false;
           }
         );
