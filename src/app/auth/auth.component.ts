@@ -1,6 +1,7 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { AuthService } from './auth.service';
+import { AuthService, authResponse } from './auth.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-auth',
@@ -9,6 +10,7 @@ import { AuthService } from './auth.service';
 })
 export class AuthComponent {
   constructor(private authService: AuthService) {}
+  authHandle!: Observable<authResponse>;
   isLogin = false;
   isLoading = false;
   error: string | undefined;
@@ -20,24 +22,27 @@ export class AuthComponent {
     if (!form.valid) {
       return;
     } else {
+      const email = form.value.email;
+      const password = form.value.password;
       this.isLoading = true;
       if (this.isLogin) {
+        this.authHandle = this.authService.login(email, password);
       } else {
-        const email = form.value.email;
-        const password = form.value.password;
-        this.authService.signUp(email, password).subscribe(
-          (response) => {
-            console.log(response);
-            this.isLoading = false;
-          },
-          (error) => {
-            console.log(error);
-            this.error = error;
-            this.isLoading = false;
-          }
-        );
+        this.authHandle = this.authService.signUp(email, password);
       }
     }
+    this.authHandle.subscribe(
+      (response) => {
+        console.log(response);
+        this.isLoading = false;
+        this.error = undefined;
+      },
+      (error) => {
+        console.log(error);
+        this.error = error;
+        this.isLoading = false;
+      }
+    );
     form.reset();
   }
 }
