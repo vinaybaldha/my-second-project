@@ -9,7 +9,7 @@ import { RecipeResolver } from './recipes/recipe-resolver.service';
 import { AuthComponent } from './auth/auth.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/recipes', pathMatch: 'full' },
+  { path: '', redirectTo: '/shopping-list', pathMatch: 'full' },
   {
     path: 'recipes',
     component: RecipesComponent,

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { AuthService, authResponse } from './auth.service';
 import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-auth',
@@ -9,7 +10,7 @@ import { Observable } from 'rxjs';
   styleUrl: './auth.component.css',
 })
 export class AuthComponent {
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private router: Router) {}
   authHandle!: Observable<authResponse>;
   isLogin = false;
   isLoading = false;
@@ -36,6 +37,7 @@ export class AuthComponent {
         console.log(response);
         this.isLoading = false;
         this.error = undefined;
+        this.router.navigate(['/recipes']);
       },
       (error) => {
         console.log(error);

@@ -1,6 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { catchError, throwError } from 'rxjs';
+import { Injectable, Input } from '@angular/core';
+import { Subject, catchError, tap, throwError } from 'rxjs';
+import { User } from './user.model';
 
 export interface authResponse {
   idToken: string;
@@ -15,8 +16,18 @@ export interface authResponse {
   providedIn: 'root',
 })
 export class AuthService {
+  user = new Subject<User>();
   constructor(private http: HttpClient) {}
-
+  private handleAuth(
+    email: string,
+    userId: string,
+    token: string,
+    expiresIn: number
+  ) {
+    const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
+    const user = new User(email, userId, token, expirationDate);
+    this.user.next(user);
+  }
   signUp(email: string, password: string) {
     return this.http
       .post<authResponse>(
@@ -27,7 +38,17 @@ export class AuthService {
           returnSecureToken: true,
         }
       )
-      .pipe(catchError((errorResp) => this.handleError(errorResp)));
+      .pipe(
+        catchError((errorResp) => this.handleError(errorResp)),
+        tap((respData) => {
+          this.handleAuth(
+            respData.email,
+            respData.localId,
+            respData.idToken,
+            +respData.expiresIn
+          );
+        })
+      );
   }
   login(email: string, password: string) {
     return this.http
@@ -39,7 +60,17 @@ export class AuthService {
           returnSecureToken: true,
         }
       )
-      .pipe(catchError((errorResp) => this.handleError(errorResp)));
+      .pipe(
+        catchError((errorResp) => this.handleError(errorResp)),
+        tap((respData) => {
+          this.handleAuth(
+            respData.email,
+            respData.localId,
+            respData.idToken,
+            +respData.expiresIn
+          );
+        })
+      );
   }
   private handleError(errorResp: HttpErrorResponse) {
     let errorMassage = 'unexpected error occured.';
