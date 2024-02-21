@@ -17,10 +17,10 @@
         </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li>
+        <li *ngIf="isAuthenticated">
           <a style="cursor: pointer">Logout</a>
         </li>
-        <li class="dropdown" appDropDown>
+        <li class="dropdown" appDropDown *ngIf="isAuthenticated">
           <a style="cursor: pointer" class="dropdown-toggle" role="button"
             >Manage <span class="caret"></span
           ></a>
