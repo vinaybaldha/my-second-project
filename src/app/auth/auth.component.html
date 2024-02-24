@@ -4,10 +4,11 @@
       <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
     </div>
 
-    <div class="alert alert-danger" *ngIf="error">
-      <p>{{ error }}</p>
-    </div>
-
+    <app-alert
+      [message]="error"
+      *ngIf="error"
+      (close)="onHandleError()"
+    ></app-alert>
     <form
       *ngIf="!isLoading"
       action=""
