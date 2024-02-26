@@ -9,7 +9,6 @@ import * as ShoppingList from '../shopping-list/store/shopping-list.actions';
 @Injectable()
 export class RecipeService {
   constructor(
-    private slService: ShoppingListService,
     private store: Store<{ shoppingList: { ingredients: Ingredient[] } }>
   ) {}
 

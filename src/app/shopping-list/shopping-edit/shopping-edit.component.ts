@@ -1,4 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  ɵflushModuleScopingQueueAsMuchAsPossible,
+} from '@angular/core';
 import { Ingredient } from '../../shared/ingredient.model';
 import { ShoppingListService } from '../shopinglist.service';
 import { NgForm } from '@angular/forms';
@@ -15,7 +20,10 @@ export class ShoppingEditComponent implements OnInit {
   editMode = false;
   ingredient!: Ingredient;
   id!: number;
-  constructor(private slService: ShoppingListService, private store: Store) {}
+  constructor(
+    private slService: ShoppingListService,
+    private store: Store<{ shoppingList: { ingredients: Ingredient[] } }>
+  ) {}
   ngOnInit(): void {
     this.slService.startEdit.subscribe((index: number) => {
       this.id = index;
@@ -33,7 +41,14 @@ export class ShoppingEditComponent implements OnInit {
 
     const ingredient = new Ingredient(name, amount);
     if (this.editMode) {
-      this.slService.updateIngredient(this.id, ingredient);
+      // this.slService.updateIngredient(this.id, ingredient);
+      this.store.dispatch(
+        new ShoppingListActions.UpdateIngredient({
+          index: this.id,
+          ingredient: ingredient,
+        })
+      );
+      this.store;
     } else {
       // this.slService.addIngredient(ingredient);
       this.store.dispatch(new ShoppingListActions.AddIngredient(ingredient));
@@ -47,6 +62,9 @@ export class ShoppingEditComponent implements OnInit {
   }
   onDelete() {
     this.onClear();
-    this.slService.deleteIngredient(this.id);
+    // this.slService.deleteIngredient(this.id);
+    this.store.dispatch(
+      new ShoppingListActions.DeleteIngredient({ index: this.id })
+    );
   }
 }
