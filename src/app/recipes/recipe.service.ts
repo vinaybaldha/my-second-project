@@ -1,16 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Recipe } from './recipe.model';
 import { Ingredient } from '../shared/ingredient.model';
-import { ShoppingListService } from '../shopping-list/shopinglist.service';
 import { Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
 import * as ShoppingList from '../shopping-list/store/shopping-list.actions';
+import * as fromShoppingList from '../shopping-list/store/shopping-list.reducer';
 
 @Injectable()
 export class RecipeService {
-  constructor(
-    private store: Store<{ shoppingList: { ingredients: Ingredient[] } }>
-  ) {}
+  constructor(private store: Store<fromShoppingList.AppState>) {}
 
   // private vadapavImage =
   //   'https://images.pexels.com/photos/17433337/pexels-photo-17433337/free-photo-of-mumbai-style-vada-pav.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1E'; // Replace with actual link
