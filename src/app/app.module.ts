@@ -6,10 +6,10 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { ShoppingListModule } from './shopping-list/shopping-list.module';
 import { SharedModule } from './shared/shared.module';
 import { CoreModule } from './core.module';
-import { AuthModule } from './auth/auth.module';
+import { StoreModule } from '@ngrx/store';
+import { ShoppingListReducer } from './shopping-list/store/shopping-list.reducer';
 
 @NgModule({
   declarations: [AppComponent, HeaderComponent],
@@ -21,6 +21,7 @@ import { AuthModule } from './auth/auth.module';
     HttpClientModule,
     SharedModule,
     CoreModule,
+    StoreModule.forRoot({ shoppingList: ShoppingListReducer }),
   ],
   bootstrap: [AppComponent],
 })
