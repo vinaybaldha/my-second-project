@@ -6,9 +6,6 @@ export interface State {
   editedIngredient: Ingredient;
   editedIndex: number;
 }
-export interface AppState {
-  shoppingList: State;
-}
 
 const initialState: State = {
   ingredients: [new Ingredient('Apple', 5), new Ingredient('Tomatoes', 10)],
@@ -18,12 +15,12 @@ const initialState: State = {
 export function ShoppingListReducer(
   state = initialState,
   action: ShoppingListActions.ShoppingListActions
-) {
+): State {
   switch (action.type) {
     case ShoppingListActions.ADD_INGREDIENT:
       return {
         ...state,
-        ingredients: [...state.ingredients, action.payload],
+        ingredients: [...state.ingredients, action.payload as Ingredient],
       };
     case ShoppingListActions.ADD_INGREDIENTS:
       return {
@@ -34,37 +31,35 @@ export function ShoppingListReducer(
         ],
       };
     case ShoppingListActions.UPDATE_INGREDIENT:
-      const ingredient =
-        state.ingredients[
-          (action.payload as { index: number; ingredient: Ingredient }).index
-        ];
+      const ingredient = state.ingredients[state.editedIndex];
       const updatedIngredient = {
         ...ingredient,
-        ...(action.payload as { index: number; ingredient: Ingredient })
-          .ingredient,
+        ...(action.payload as Ingredient),
       };
 
       const updatedIngredients = [...state.ingredients];
-      updatedIngredients[
-        (action.payload as { index: number; ingredient: Ingredient }).index
-      ] = updatedIngredient;
+      updatedIngredients[state.editedIndex] = updatedIngredient;
       return {
         ...state,
         ingredients: updatedIngredients,
+        editedIngredient: null,
+        editedIndex: -1,
       };
     case ShoppingListActions.DELETE_INGREDIENT:
       return {
         ...state,
         ingredients: state.ingredients.filter((ingredient, index) => {
-          return index !== (action.payload as { index: number }).index;
+          return index !== state.editedIndex;
         }),
+        editedIngredient: null,
+        editedIndex: -1,
       };
     case ShoppingListActions.START_EDIT:
       return {
         ...state,
-        editedIndex: action.payload,
+        editedIndex: action.payload as number,
         editedIngredient: {
-          ...state.ingredients[(action.payload as { index: number }).index],
+          ...state.ingredients[action.payload as number],
         },
       };
     case ShoppingListActions.END_EDIT:
