@@ -7,8 +7,10 @@ import {
 } from '@angular/core';
 import { DataStorageService } from '../shared/data-storage.service';
 import { AuthService } from '../auth/auth.service';
-import { Subscription } from 'rxjs';
-import { Router } from '@angular/router';
+import { Subscription, map } from 'rxjs';
+import * as fromApp from '../store/app.reducer';
+import { Store } from '@ngrx/store';
+import * as fromAuthActions from '../auth/store/auth.actions';
 
 @Component({
   selector: 'app-header',
@@ -21,13 +23,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   constructor(
     private dataStorageService: DataStorageService,
-    private authService: AuthService
+    private store: Store<fromApp.AppState>
   ) {}
 
   ngOnInit(): void {
-    this.userAuth = this.authService.user.subscribe((user) => {
-      this.isAuthenticated = !!user;
-    });
+    this.userAuth = this.store
+      .select('auth')
+      .pipe(map((authState) => authState.user))
+      .subscribe((user) => {
+        this.isAuthenticated = !!user;
+      });
   }
 
   @Output() selectMenu = new EventEmitter<string>();
@@ -45,6 +50,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.userAuth.unsubscribe();
   }
   onLogout() {
-    this.authService.logout();
+    // this.authService.logout();
+    this.store.dispatch(new fromAuthActions.Logout());
   }
 }
