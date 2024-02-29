@@ -165,7 +165,7 @@ export class AuthEffects {
 
           // this.autoLogout(expirationTime);
         }
-        return of(null);
+        return of(new fromAuthActions.Logout());
       })
     )
   );
