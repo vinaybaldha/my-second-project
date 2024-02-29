@@ -6,11 +6,11 @@ import {
   Output,
 } from '@angular/core';
 import { DataStorageService } from '../shared/data-storage.service';
-import { AuthService } from '../auth/auth.service';
 import { Subscription, map } from 'rxjs';
 import * as fromApp from '../store/app.reducer';
 import { Store } from '@ngrx/store';
 import * as fromAuthActions from '../auth/store/auth.actions';
+import * as fromRecipeActions from '../recipes/store/recipes.actions';
 
 @Component({
   selector: 'app-header',
@@ -44,7 +44,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.dataStorageService.saveData();
   }
   onFatch() {
-    this.dataStorageService.fatchData().subscribe();
+    // this.dataStorageService.fatchData().subscribe();
+    this.store.dispatch(new fromRecipeActions.FatchRecipes());
   }
   ngOnDestroy(): void {
     this.userAuth.unsubscribe();

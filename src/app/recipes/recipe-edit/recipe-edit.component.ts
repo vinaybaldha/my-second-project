@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Params, Route, Router } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { RecipeService } from '../recipe.service';
 import { Ingredient } from '../../shared/ingredient.model';
 import { Recipe } from '../recipe.model';
 import { Store } from '@ngrx/store';
 import * as fromAppReducer from '../../store/app.reducer';
-import { map } from 'rxjs';
 
 @Component({
   selector: 'app-recipe-edit',
@@ -54,16 +53,17 @@ export class RecipeEditComponent implements OnInit {
     let recipeIngredients = new FormArray<FormGroup>([]);
 
     if (this.editMode) {
-      // const recipe = this.recipeService.getRecipeById(this.id);
-      let recipe: Recipe = null;
-      this.store
-        .select('recipes')
-        .pipe(map((recipesStore) => recipesStore.recipes))
-        .subscribe((recipes) => {
-          recipe = recipes.find((recipe, index) => {
-            return (this.id = index);
-          });
-        });
+      const recipe = this.recipeService.getRecipeById(this.id);
+      // let recipe: Recipe = null;
+      // this.store
+      //   .select('recipes')
+      //   .pipe(map((recipesStore) => recipesStore.recipes))
+      //   .subscribe((recipes) => {
+      //     recipe = recipes.find((recipe, index) => {
+      //       return (this.id = index);
+      //     });
+      //   });
+
       recipeName = recipe.name;
       recipeImagePath = recipe.imagePath;
       recipeDescription = recipe.description;
