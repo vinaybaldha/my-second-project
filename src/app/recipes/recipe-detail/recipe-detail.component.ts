@@ -1,10 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Recipe } from '../recipe.model';
 import { RecipeService } from '../recipe.service';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { map, switchMap } from 'rxjs';
 import { Store } from '@ngrx/store';
 import * as fromAppReducer from '../../store/app.reducer';
+import * as fromRecipeActions from '../store/recipes.actions';
 
 @Component({
   selector: 'app-recipe-detail',
@@ -39,7 +40,10 @@ export class RecipeDetailComponent implements OnInit {
         // this.id = +param['id'];
         // this.recipe = this.recipeService.getRecipeById(this.id);
         this.recipe = recipes.find((recipe, index) => {
-          return (this.id = index);
+          // console.log(recipe);
+          // console.log(this.id, index, recipe);
+          // console.log(this.id == index);
+          return this.id == index;
         });
       });
   }
@@ -50,7 +54,9 @@ export class RecipeDetailComponent implements OnInit {
     this.router.navigate(['edit'], { relativeTo: this.route });
   }
   onDelete() {
-    this.recipeService.deleteRecipe(this.id);
+    console.log(this.id);
+    // this.recipeService.deleteRecipe(this.id);
+    this.store.dispatch(new fromRecipeActions.DeleteRecipe(+this.id));
     this.router.navigate(['/recipes']);
   }
 }

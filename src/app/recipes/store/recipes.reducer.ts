@@ -6,7 +6,7 @@ export interface State {
 }
 
 const initialState: State = {
-  recipes: null,
+  recipes: [],
 };
 
 export function RecipesReducer(
@@ -17,7 +17,41 @@ export function RecipesReducer(
     case fromRecipeActions.SET_RECIPES:
       return {
         ...state,
-        recipes: action.payload,
+        recipes: (action as fromRecipeActions.SetRecipes).payload,
+      };
+
+    case fromRecipeActions.ADD_RECIPE:
+      return {
+        ...state,
+        recipes: [
+          ...state.recipes,
+          (action as fromRecipeActions.AddRecipe).payload,
+        ],
+      };
+
+    case fromRecipeActions.UPDATE_RECIPE:
+      const updatedRecipe = {
+        ...state.recipes[
+          (action as fromRecipeActions.UpdateRecipe).payload.index
+        ],
+        ...(action as fromRecipeActions.UpdateRecipe).payload.recipe,
+      };
+
+      const updatedRecipes = [...state.recipes];
+      updatedRecipes[(action as fromRecipeActions.UpdateRecipe).payload.index] =
+        updatedRecipe;
+      return {
+        ...state,
+        recipes: updatedRecipes,
+      };
+
+    case fromRecipeActions.DELETE_RECIPE:
+      const deleteIndex = (action as fromRecipeActions.DeleteRecipe).payload;
+      return {
+        ...state,
+        recipes: state.recipes.filter((recipe, index) => {
+          return index !== deleteIndex;
+        }),
       };
     default:
       return state;
