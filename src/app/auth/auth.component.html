@@ -45,16 +45,12 @@
         />
       </div>
 
-      <button
-        type="submit"
-        class="btn btn-primary"
-        [disabled]="!authForm.valid"
-      >
+      <button type="submit" class="button-17" [disabled]="!authForm.valid">
         {{ isLogin ? "Login" : "Sign Up" }}
       </button>
       |
 
-      <button type="button" class="btn btn-primary" (click)="onSwitch()">
+      <button type="button" class="button-17" (click)="onSwitch()">
         Switch to {{ isLogin ? "Sign Up" : "Login" }}
       </button>
     </form>
